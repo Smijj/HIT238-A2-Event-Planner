@@ -83,7 +83,7 @@ function saveEvent() {
     
     // Getting the list (array techincally whatever) of events from local storage
     tempList = JSON.parse(localStorage.getItem("events"));
-    tempList.push(data); 
+    tempList.push(JSON.stringify(data)); 
 
     // Adding event data to local storage
     localStorage.setItem("events", JSON.stringify(tempList));
@@ -217,55 +217,39 @@ function addToFriendsGoing(key) {
     friendData.going = true;
     friendList.splice(key, 1, JSON.stringify(friendData)); // Replacing the entry in the list
     localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
-    loadEventEditPage(); // Reload event edit page to reflect these changes
-
+    loadFriendPool(); // Reload friend pool list to reflect these changes
 
     var tempList = JSON.parse(localStorage.getItem('temp_list'));
     tempList.push(JSON.stringify(friendData)); 
     localStorage.setItem("temp_list", JSON.stringify(tempList));
 
-    console.log(tempList.length);
-
     // Adding the friends name to the going list in the add event page
-    var outStr = "<li onclick=\"removeFromFriendsGoing(" + tempList.length + ")\">" + friendData.name + "</li>"
+    var outStr = "<li onclick=\"removeFromFriendsGoing(" + tempList.length + ", " + key + ")\">" + friendData.name + "</li>"
     document.getElementById("add-event-friends-going").innerHTML += outStr;
 }
 
 
 function resetFriendGoingStatus() {
-    // Getting the list of dictionaries containing the users friends info
-    var friendList = JSON.parse(localStorage.getItem('friends'));
-    
-    for (var i = 0; i < friendList.length; i++) {
-
-        var friendData = JSON.parse(friendList[i]);
+    if (localStorage.getItem("friends") != null) {
+        // Getting the list of dictionaries containing the users friends info
+        var friendList = JSON.parse(localStorage.getItem('friends'));
         
-        // Setting the going variable to true so that it becomes possible to 
-        // remove this friend from the pool of available friends
-        friendData.going = false;
-        friendList.splice(i, 1, JSON.stringify(friendData)); // Replacing the entry in the list     
+        for (var i = 0; i < friendList.length; i++) {
+    
+            var friendData = JSON.parse(friendList[i]);
+            
+            // Setting the going variable to true so that it becomes possible to 
+            // remove this friend from the pool of available friends
+            friendData.going = false;
+            friendList.splice(i, 1, JSON.stringify(friendData)); // Replacing the entry in the list     
+        }
+    
+        localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
     }
-
-    localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
 }
 
 
-
-
-// Page Loading
-
-function loadEventViewPage() {
-    ChooseEventPage("flex", "none", "none")
-}
-
-function loadEventEditPage() {
-    ChooseEventPage("none", "flex", "none")
-
-    // Hiding Header Elements
-    document.getElementById("add-event").style.display = "none";
-    document.getElementById("event-search-bar").style.display = "none";
-    document.getElementById("search-icon").style.display = "none";
-
+function loadFriendPool() {
     if (localStorage.getItem("friends") != null) {
         // Clears the list element in the html
         document.getElementById("add-event-friends-list").innerHTML = "";
@@ -284,11 +268,49 @@ function loadEventEditPage() {
     }
 }
 
+function loadFriendsGoing() {
+    if (localStorage.getItem("temp_list") != null) {
+        // Clears the list element in the html
+        document.getElementById("add-event-friends-going").innerHTML = "";
+
+        var friendList = JSON.parse(localStorage.getItem('temp_list'));
+        for (var i = 0; i < friendList.length; i++) {
+            var outStr = "";
+            var friendData = JSON.parse(friendList[i]);
+            
+            if (!friendData.going) {
+                outStr += "<li onclick=\"addToFriendsGoing(" + i + ")\">" + friendData.name + "</li>";
+            }
+            
+            document.getElementById("add-event-friends-going").innerHTML += outStr;
+        }
+    }
+}
+
+
+
+// Page Loading
+
+function loadEventViewPage() {
+    ChooseEventPage("flex", "none", "none")
+}
+
+function loadEventEditPage() {
+    ChooseEventPage("none", "flex", "none")
+
+    loadFriendPool();
+
+    // Hiding Header Elements
+    document.getElementById("add-event").style.display = "none";
+    document.getElementById("event-search-bar").style.display = "none";
+    document.getElementById("search-icon").style.display = "none";
+}
+
 function loadEventListPage() {
     ChooseEventPage("none", "none", "flex");
 
     resetFriendGoingStatus(); // Reseting the 'going' variable in the friends dictionary to false
-    localStorage.removeItem('temp_list'); // Removing the temp_list in local storage
+    localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
 
     // Showing Header Elements
     document.getElementById("add-event").style.display = "block";
