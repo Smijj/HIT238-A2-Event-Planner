@@ -18,6 +18,26 @@ function toggleSidebar() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* EVENTS */
 
 // Data Manipulation Functions
@@ -108,6 +128,7 @@ function editEvent(key) {
 
 
 
+
 // Data Displaying Functions
 
 function addEventPage() {
@@ -115,22 +136,11 @@ function addEventPage() {
 
     document.getElementById("edit-event-header").innerHTML = "Add Event";
     document.getElementById("edit-event-header").style.display = "block";
-    
+
     document.getElementById("nameValue").value = null;
     document.getElementById("dateValue").value = null;
     document.getElementById("timeValue").value = null;
     document.getElementById("repeatingValue").checked = null;
-    
-    var friendList = JSON.parse(localStorage.getItem('friends'));
-    for (var i = 0; i < friendList.length; i++) {
-        var outStr = "";
-        var friendData = JSON.parse(friendList[i]);
-        
-        outStr += "<li onclick=\"\">" + friendData.name + "</li>";
-        
-        document.getElementById("add-event-friends-list").innerHTML += outStr;
-    }
-
 
     // Switching Buttons in the event edit page
     document.getElementById("event-edit-button").innerHTML = "Add Event";
@@ -173,11 +183,81 @@ function viewEventPage(key) {
 }
 
 
+
+
+function removeFromFriendsGoing(tempKey, friendKey) {
+    // Getting the list of dictionaries containing the users friends info
+    var friendList = JSON.parse(localStorage.getItem('friends'));
+    var friendData = JSON.parse(friendList[friendKey]);
+    
+    // Reseting the friend 'going' variable to false so it shows back up in the friend pool
+    friendData.going = false;
+    friendList.splice(friendKey, 1, JSON.stringify(friendData)); // Replacing the entry in the list
+    localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
+    loadEventEditPage(); // Reload event edit page to reflect these changes
+    
+
+    // Remove a friend item from temp storage
+    var tempList = JSON.parse(localStorage.getItem('temp_list'));
+    tempList.splice(tempKey, 1); 
+    localStorage.setItem("temp_list", JSON.stringify(tempList));
+}
+
+function addToFriendsGoing(key) {
+    if (localStorage.getItem("temp_list") == null) {
+        var temp_list = [];
+        localStorage.setItem("temp_list", JSON.stringify(temp_list));
+    }
+
+    // Getting the list of dictionaries containing the users friends info
+    var friendList = JSON.parse(localStorage.getItem('friends'));
+    var friendData = JSON.parse(friendList[key]);
+    // Setting the going variable to true so that it becomes possible to 
+    // remove this friend from the pool of available friends
+    friendData.going = true;
+    friendList.splice(key, 1, JSON.stringify(friendData)); // Replacing the entry in the list
+    localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
+    loadEventEditPage(); // Reload event edit page to reflect these changes
+
+
+    var tempList = JSON.parse(localStorage.getItem('temp_list'));
+    tempList.push(JSON.stringify(friendData)); 
+    localStorage.setItem("temp_list", JSON.stringify(tempList));
+
+    console.log(tempList.length);
+
+    // Adding the friends name to the going list in the add event page
+    var outStr = "<li onclick=\"removeFromFriendsGoing(" + tempList.length + ")\">" + friendData.name + "</li>"
+    document.getElementById("add-event-friends-going").innerHTML += outStr;
+}
+
+
+function resetFriendGoingStatus() {
+    // Getting the list of dictionaries containing the users friends info
+    var friendList = JSON.parse(localStorage.getItem('friends'));
+    
+    for (var i = 0; i < friendList.length; i++) {
+
+        var friendData = JSON.parse(friendList[i]);
+        
+        // Setting the going variable to true so that it becomes possible to 
+        // remove this friend from the pool of available friends
+        friendData.going = false;
+        friendList.splice(i, 1, JSON.stringify(friendData)); // Replacing the entry in the list     
+    }
+
+    localStorage.setItem("friends", JSON.stringify(friendList)); // uploading the updated list
+}
+
+
+
+
 // Page Loading
 
 function loadEventViewPage() {
     ChooseEventPage("flex", "none", "none")
 }
+
 function loadEventEditPage() {
     ChooseEventPage("none", "flex", "none")
 
@@ -185,9 +265,30 @@ function loadEventEditPage() {
     document.getElementById("add-event").style.display = "none";
     document.getElementById("event-search-bar").style.display = "none";
     document.getElementById("search-icon").style.display = "none";
+
+    if (localStorage.getItem("friends") != null) {
+        // Clears the list element in the html
+        document.getElementById("add-event-friends-list").innerHTML = "";
+
+        var friendList = JSON.parse(localStorage.getItem('friends'));
+        for (var i = 0; i < friendList.length; i++) {
+            var outStr = "";
+            var friendData = JSON.parse(friendList[i]);
+            
+            if (!friendData.going) {
+                outStr += "<li onclick=\"addToFriendsGoing(" + i + ")\">" + friendData.name + "</li>";
+            }
+            
+            document.getElementById("add-event-friends-list").innerHTML += outStr;
+        }
+    }
 }
+
 function loadEventListPage() {
     ChooseEventPage("none", "none", "flex");
+
+    resetFriendGoingStatus(); // Reseting the 'going' variable in the friends dictionary to false
+    localStorage.removeItem('temp_list'); // Removing the temp_list in local storage
 
     // Showing Header Elements
     document.getElementById("add-event").style.display = "block";
@@ -267,6 +368,25 @@ function searchEvents() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* FRIENDS */
 
 // Data Manipulation Functions
@@ -291,7 +411,7 @@ function saveFriend() {
     var emailValue = document.getElementById("friendEmailValue").value;
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "address" : addressValue, "email": emailValue};
+    var data = {"name" : nameValue, "address" : addressValue, "email": emailValue, "going": false};
     
     tempList = JSON.parse(localStorage.getItem("friends"));
     tempList.push(JSON.stringify(data));
