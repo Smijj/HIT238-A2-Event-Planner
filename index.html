@@ -89,18 +89,12 @@
 
             <label>Friends Going*: </label>
             <article>
-                <ul>
-                    <li>Friend 1</li>
-                    <li>Friend 4</li>
-                </ul>
-                <button id="add-friends-to-list">></button>
-                <ul>
-                    <li>Friend 2</li>
-                    <li>Friend 3</li>
-                </ul>
+                <ul id="add-event-friends-list"></ul>
+                <div class="Vdivider"></div>
+                <ul id="add-event-friends-going"></ul>
             </article>
             
-            <button id="event-edit-button">Edit Event</button>
+            <button id="event-edit-button">Save Event</button>
             <button id="event-edit-back-button" onclick="loadEventListPage()">Back</button>
 
             <p>*Not Functional Yet</p>
@@ -158,7 +152,7 @@
             <label for="friendEmailValue">Email: </label>
             <input type="email" name="email" id="friendEmailValue">
 
-            <button id="friend-edit-button">Add Friend</button>
+            <button id="friend-edit-button">Save Friend</button>
             <button id="friend-cancel-button" onclick="loadFriendListPage()">Cancel</button>
         </section>
     </aside>

@@ -33,6 +33,7 @@ function deleteEvent(key, eventType) {
     } 
     
 }
+
 function saveEvent() {
     if (localStorage.getItem("events") == null) {
         var eventList = [];
@@ -45,7 +46,7 @@ function saveEvent() {
     var timeValue = document.getElementById("timeValue").value;
     var dateValue = document.getElementById("dateValue").value;
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
-
+    var friends = [];
 
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
@@ -58,30 +59,11 @@ function saveEvent() {
     }
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue};
+    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friends": friends};
     
     // Getting the list (array techincally whatever) of events from local storage
     tempList = JSON.parse(localStorage.getItem("events"));
-    
-
-    // Ill use this for error detection later (maybe(if i have time(i probbaly wont(nope i didnt))))
-
-    // for(var i=0; i < tempList.length; i++) {
-    //     var eventData = JSON.parse(tempList[i]); // Parsing the stringified event OBJ to be referenced
-
-    //     if (eventData.name == nameValue) {
-    //         tempList[i] = JSON.stringify(data);
-
-    //         // Adding event data to local storage
-    //         localStorage.setItem("events", JSON.stringify(tempList));
-    //    
-    //         loadEventListPage();
-            // loadEventList(eventType);
-    //         return;
-    //     }
-    // }
-
-    tempList.push(JSON.stringify(data)); 
+    tempList.push(data); 
 
     // Adding event data to local storage
     localStorage.setItem("events", JSON.stringify(tempList));
@@ -89,6 +71,7 @@ function saveEvent() {
     loadEventListPage();
     loadEventList(eventType);
 }
+
 function editEvent(key) {
     var nameValue = document.getElementById("nameValue").value;
     var repeatingValue = document.getElementById("repeatingValue").checked;
@@ -122,6 +105,9 @@ function editEvent(key) {
 }
 
 
+
+
+
 // Data Displaying Functions
 
 function addEventPage() {
@@ -129,15 +115,26 @@ function addEventPage() {
 
     document.getElementById("edit-event-header").innerHTML = "Add Event";
     document.getElementById("edit-event-header").style.display = "block";
-
-    // Switching Buttons in the event edit page
-    document.getElementById("event-edit-button").innerHTML = "Add Event";
-    document.getElementById("event-edit-button").onclick = function() {saveEvent()};
-
+    
     document.getElementById("nameValue").value = null;
     document.getElementById("dateValue").value = null;
     document.getElementById("timeValue").value = null;
     document.getElementById("repeatingValue").checked = null;
+    
+    var friendList = JSON.parse(localStorage.getItem('friends'));
+    for (var i = 0; i < friendList.length; i++) {
+        var outStr = "";
+        var friendData = JSON.parse(friendList[i]);
+        
+        outStr += "<li onclick=\"\">" + friendData.name + "</li>";
+        
+        document.getElementById("add-event-friends-list").innerHTML += outStr;
+    }
+
+
+    // Switching Buttons in the event edit page
+    document.getElementById("event-edit-button").innerHTML = "Add Event";
+    document.getElementById("event-edit-button").onclick = function() {saveEvent()};
 }
 
 function editEventPage(key) {
@@ -147,7 +144,7 @@ function editEventPage(key) {
     document.getElementById("edit-event-header").style.display = "block";
     
     // Switching Buttons in the event edit page
-    document.getElementById("event-edit-button").innerHTML = "Edit Event";
+    document.getElementById("event-edit-button").innerHTML = "Save Event";
     document.getElementById("event-edit-button").onclick = function() {editEvent(key)};
     
     var eventList = JSON.parse(localStorage.getItem("events"));
@@ -339,7 +336,7 @@ function editFriendPage(key) {
     loadFriendEditPage();
 
     // Switching Buttons in the friend edit page
-    document.getElementById("friend-edit-button").innerHTML = "Edit Friend";
+    document.getElementById("friend-edit-button").innerHTML = "Save Friend";
     document.getElementById("friend-edit-button").onclick = function() {editFriend(key)};
     
     var friendList = JSON.parse(localStorage.getItem("friends"));
