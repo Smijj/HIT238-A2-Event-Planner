@@ -28,6 +28,7 @@ function deleteEvent(key, eventType) {
         eventList.splice(key, 1);
         localStorage.setItem("events", JSON.stringify(eventList));
 
+        loadEventListPage();
         loadEventList(eventType);
     } 
     
@@ -75,7 +76,7 @@ function saveEvent() {
     //         localStorage.setItem("events", JSON.stringify(tempList));
     //    
     //         loadEventListPage();
-    //         loadEventList(eventType);
+            // loadEventList(eventType);
     //         return;
     //     }
     // }
@@ -160,13 +161,13 @@ function editEventPage(key) {
 
 function viewEventPage(key) {
     loadEventViewPage();
+
+    var eventList = JSON.parse(localStorage.getItem("events"));
+    var eventData = JSON.parse(eventList[key]);
     
     // Setting the onclick functions for event view buttons
     document.getElementById("event-view-edit-button").onclick = function() {editEventPage(key)};
-    document.getElementById("event-view-delete-button").onclick = function() {deleteEvent(key)};
-    
-    var eventList = JSON.parse(localStorage.getItem("events"));
-    var eventData = JSON.parse(eventList[key]);
+    document.getElementById("event-view-delete-button").onclick = function() {deleteEvent(key, eventData.type)};
 
     document.getElementById("event-view-name").innerHTML = eventData.name;
     document.getElementById("event-view-date").innerHTML = eventData.date;
@@ -189,7 +190,7 @@ function loadEventEditPage() {
     document.getElementById("search-icon").style.display = "none";
 }
 function loadEventListPage() {
-    ChooseEventPage("none", "none", "flex")
+    ChooseEventPage("none", "none", "flex");
 
     // Showing Header Elements
     document.getElementById("add-event").style.display = "block";
@@ -279,7 +280,7 @@ function deleteFriend(key) {
         friendList.splice(key, 1);
         localStorage.setItem("friends", JSON.stringify(friendList));
 
-        loadFriendList();
+        loadFriendListPage();
     }
 }
 function saveFriend() {
