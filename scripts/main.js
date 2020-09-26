@@ -218,16 +218,15 @@ function resetFriendGoingStatus() {
     }
 }
 
-function removeFromFriendsGoing(key) {
+function removeFromFriendsGoing(tempListKey) {
     // Getting the list of dictionaries containing the users friends info
     var friendList = JSON.parse(localStorage.getItem('friends'));
     var tempList = JSON.parse(localStorage.getItem('temp_list'));
     
-    setGoingStatus(JSON.parse(tempList[key]).friendKey, false, friendList);
-    loadEventEditPage(); // Reload event edit page to reflect these changes
+    setGoingStatus(JSON.parse(tempList[tempListKey]).friendKey, false, friendList);
     
     // Remove a friend item from temp storage
-    tempList.splice(key, 1); 
+    tempList.splice(tempListKey, 1); 
     localStorage.setItem("temp_list", JSON.stringify(tempList));
 
     loadFriendsGoingSection();
@@ -250,8 +249,6 @@ function addToFriendsGoing(key) {
 
     loadFriendsGoingSection();
 }
-
-
 
 function loadFriendsGoingSection() {
     if (localStorage.getItem("friends") != null) {
