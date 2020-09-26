@@ -10,6 +10,13 @@ if ("serviceWorker" in navigator) {
 }
 
 
+function onLoad(eventType) {
+    loadEventList('upcoming');
+    resetFriendGoingStatus();
+    localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
+}
+
+
 function toggleSidebar() {
     var sidebar = document.getElementById("sidebar");
     sidebar.style.display = (sidebar.style.display == "block") ? "none" : "block";
@@ -224,7 +231,6 @@ function removeFromFriendsGoing(key) {
     localStorage.setItem("temp_list", JSON.stringify(tempList));
 
     loadFriendsGoingSection();
-
 }
 
 function addToFriendsGoing(key) {
@@ -278,6 +284,8 @@ function loadFriendsGoingSection() {
 
             document.getElementById("add-event-friends-going").innerHTML += outStr;
         }
+    } else {
+        document.getElementById("add-event-friends-going").innerHTML = "";
     }
 }
 
