@@ -87,11 +87,17 @@
             <label for="repeatingValue">Repeating? </label>
             <input type="checkbox" name="repeating" id="repeatingValue">
 
-            <label>Friends Going*: </label>
-            <article>
-                <ul id="add-event-friends-list"></ul>
-                <div class="Vdivider"></div>
-                <ul id="add-event-friends-going"></ul>
+            <label for="friendsGoing">Invite Friends: </label>
+            <article id="friendsGoing">
+                <div>
+                    <h2>Friends:</h2>
+                    <ul id="add-event-friends-list"></ul>
+                </div>
+                <span class="Vdivider"></span>
+                <div>
+                    <h2>Going:</h2>
+                    <ul id="add-event-friends-going"></ul>
+                </div>
             </article>
             
             <button id="event-edit-button">Save Event</button>

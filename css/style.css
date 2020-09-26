@@ -204,6 +204,10 @@ button {
     font-size: 20px;
     font-weight: bold;
 }
+#event-edit-section p {
+    font-size: 16px;
+    font-weight: normal;
+}
 #event-edit-section input {
     width: 70%;
     height: 28px;
@@ -224,8 +228,18 @@ button {
     background-color:white;
     color: var(--darkTextColour);
 }
-#event-edit-section article ul{
+#event-edit-section article div{
+    display: flex;
+    flex-direction: column;
     width: 49%;
+    text-align: center;
+}
+#event-edit-section article h2{
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+}
+#event-edit-section article ul{
     padding: 3px;
     margin: 0px;
     text-align: center;
@@ -236,10 +250,6 @@ button {
     font-size: 15px;
     overflow: hidden;
     margin: 3px 0 3px 0;
-}
-#event-edit-section p {
-    font-size: 16px;
-    font-weight: normal;
 }
 
 
