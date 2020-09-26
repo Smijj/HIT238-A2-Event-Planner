@@ -16,7 +16,6 @@ function onLoad(eventType) {
     localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
 }
 
-
 function toggleSidebar() {
     var sidebar = document.getElementById("sidebar");
     sidebar.style.display = (sidebar.style.display == "block") ? "none" : "block";
@@ -201,6 +200,16 @@ function viewEventPage(key) {
     document.getElementById("event-view-date").innerHTML = eventData.date;
     document.getElementById("event-view-time").innerHTML = eventData.time;
     document.getElementById("event-view-repeating").innerHTML = eventData.repeating;
+
+    document.getElementById("view-friends-going").innerHTML = "";
+    for (var i = 0; i < eventData.friendsGoing.length; i++) {
+        var outStr = "";
+        var friendData = JSON.parse(eventData.friendsGoing[i]);
+        
+        outStr += "<li>" + friendData.name + "</li>";
+        
+        document.getElementById("view-friends-going").innerHTML += outStr;
+    }
 }
 
 
