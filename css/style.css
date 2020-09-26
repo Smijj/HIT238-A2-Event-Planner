@@ -323,15 +323,16 @@ button {
 }
 #aside-headerbar h2 {
     margin: 8px 0 8px auto;
+    width: auto;
 }
 #aside-headerbar #add-friend {
     background-color: var(--buttonHighlightColour);
     color: var(--lightTextColour);
-    font-size: 22px;
+    font-size: 14px;
     margin: 3px auto 3px 5px;
-    padding: 1px auto 1px auto;
-    height: 30px;
-    width: 30px;
+    padding: 2px auto 2px auto;
+    height: auto;
+    width: 30%;
 }
 #friend-search-bar {
     width: 70%;
@@ -375,9 +376,11 @@ button {
 }
 .friend-edit-button {
     margin: 0px 5px 5px auto;
+    height: 30px;
 }
 .friend-delete-button {
     margin: 0px auto 5px 5px;
+    height: 30px;
 }
 
 
