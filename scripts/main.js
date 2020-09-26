@@ -73,7 +73,9 @@ function saveEvent() {
     var timeValue = document.getElementById("timeValue").value;
     var dateValue = document.getElementById("dateValue").value;
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
-    var friends = [];
+    var friendsGoing = JSON.parse(localStorage.getItem('temp_list')); // gets a list of stringified dictionaries
+
+    console.log(friendsGoing);
 
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
@@ -86,14 +88,13 @@ function saveEvent() {
     }
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friends": friends};
-    
+    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friendsGoing": friendsGoing};
     // Getting the list (array techincally whatever) of events from local storage
-    tempList = JSON.parse(localStorage.getItem("events"));
-    tempList.push(JSON.stringify(data)); 
+    var eventList = JSON.parse(localStorage.getItem("events"));
+    eventList.push(JSON.stringify(data)); 
 
     // Adding event data to local storage
-    localStorage.setItem("events", JSON.stringify(tempList));
+    localStorage.setItem("events", JSON.stringify(eventList));
 
     loadEventListPage();
     loadEventList(eventType);
@@ -106,6 +107,8 @@ function editEvent(key) {
     var timeValue = document.getElementById("timeValue").value;
     var dateValue = document.getElementById("dateValue").value;
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
+    var friendsGoing = JSON.parse(localStorage.getItem('temp_list')); // gets a list of stringified dictionaries
+
 
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
@@ -118,8 +121,7 @@ function editEvent(key) {
     }
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue};
-
+    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friendsGoing": friendsGoing};
     // Getting the list (array techincally whatever) of events from local storage
     tempList = JSON.parse(localStorage.getItem("events"));
     tempList.splice(key, 1, JSON.stringify(data)); // Replacing the existing data in the event list with the new values
@@ -171,6 +173,18 @@ function editEventPage(key) {
     document.getElementById("dateValue").value = eventData.rawDate;
     document.getElementById("timeValue").value = eventData.time;
     document.getElementById("repeatingValue").checked = eventData.repeating;
+
+    localStorage.setItem("temp_list", JSON.stringify(eventData.friendsGoing));
+
+    if (localStorage.getItem("temp_list") != null && localStorage.getItem("temp_list") != undefined) {
+        // Getting the list of dictionaries containing the users friends info
+        var friendList = JSON.parse(localStorage.getItem('friends'));
+        for (var i = 0; i < eventData.friendsGoing.length; i++) {
+            setGoingStatus(JSON.parse(eventData.friendsGoing[i]).friendKey, true, friendList);  
+        }
+    }
+
+    loadFriendsGoingSection();
 }
 
 function viewEventPage(key) {
@@ -233,7 +247,7 @@ function removeFromFriendsGoing(tempListKey) {
 }
 
 function addToFriendsGoing(key) {
-    if (localStorage.getItem("temp_list") == null) {
+    if (localStorage.getItem("temp_list") == null || localStorage.getItem("temp_list") == undefined) {
         var temp_list = [];
         localStorage.setItem("temp_list", JSON.stringify(temp_list));
     }
