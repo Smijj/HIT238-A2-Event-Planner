@@ -353,8 +353,9 @@ function ChooseEventPage(view, edit, list) {
 }
 
 function loadEventList(eventType) {
-    var buttonBase = "rgb(180, 180, 180)";
-    var buttonHighlight = "rgb(78, 78, 78)";
+    var buttonBase = "#86BBD8";
+    // var buttonHighlight = "#D4520C";
+    var buttonHighlight = "#d46b32";
     var buttonTextBase = "black";
     var buttonTextHighlight = "white";
 

@@ -1,15 +1,16 @@
 /* Variables */
 
 :root {
-    --backgroundColour: rgb(78, 74, 85);
-    --headerBackgroundColour: rgb(255, 0, 0);
-    --buttonBackgroundColour: rgb(143, 133, 158);
-    --eventBackgroundColour: rgb(134, 70, 199);
-    --highlightColour: white;
+    --backgroundColour: #2F4858;
+    --headerBackgroundColour: #86BBD8;
+    --buttonBackgroundColour: #d46b32;
+    --eventBackgroundColour: #33658A;
+    --highlightColour: #86BBD8;
     --borderColour: black;
     --darkTextColour: black;
     --lightTextColour: white;
 }
+
 
 /* General */
 
@@ -105,6 +106,7 @@ input[type=search] {
 #add-event {
     height: 40px;
     margin: auto 5px auto 10px;
+    font-weight: bold;
 }
 #event-search-bar {
     height: 40px;
@@ -167,6 +169,7 @@ input[type=search] {
     border-radius: 10px;
 
     background-color: var(--eventBackgroundColour);
+    color: var(--lightTextColour);
     border: 3px solid var(--borderColour);
     padding: 0 10px 0 10px;
     margin: 0 0 10px 0;
@@ -220,6 +223,9 @@ input[type=search] {
     font-size: 18px;
     margin-bottom:8px;
 }
+#event-edit-section label {
+    color: var(--highlightColour);
+}
 #event-edit-section button {
     width: 70%;
     height: 35px;
@@ -260,6 +266,7 @@ input[type=search] {
 
 
 /* Event View Section */
+
 #event-view-section {
     display: none; /* This will get overwritten by the javascript */
     flex-direction: column;
@@ -267,7 +274,7 @@ input[type=search] {
     padding: 15px;
 }
 #event-view-section label {
-    color: var(--lightTextColour);
+    color: var(--highlightColour);
     font-size: 20px;
     font-weight: bold;
 }
@@ -300,12 +307,12 @@ input[type=search] {
 #sidebar {
     display: none; /* This will get overwritten by the javascript */
     width: 192px;
-    height: auto;
-    position: absolute;
+    height: 100%;
+    position: fixed;
+    overflow: scroll;
     right: 0px;
     background-color: var(--backgroundColour);
-    border-left: var(--highlightColour) solid 5px;
-    border-bottom: var(--highlightColour) solid 5px;
+    border-left: var(--borderColour) solid 5px;
 }
 #sidebar #menu-button-bar {
     display: flex;
