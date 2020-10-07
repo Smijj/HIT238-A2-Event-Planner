@@ -1,10 +1,10 @@
 /* Variables */
 
 :root {
-    --backgroundColour: rgb(49, 49, 49);
-    --buttonBackgroundColour: rgb(180, 180, 180);
-    --buttonHighlightColour: rgb(78, 78, 78);
-    --eventBackgroundColour: rgb(206, 196, 216);
+    --backgroundColour: rgb(78, 74, 85);
+    --headerBackgroundColour: rgb(255, 0, 0);
+    --buttonBackgroundColour: rgb(143, 133, 158);
+    --eventBackgroundColour: rgb(134, 70, 199);
     --highlightColour: white;
     --borderColour: black;
     --darkTextColour: black;
@@ -54,6 +54,12 @@ button {
     font-weight: bold;
 }
 
+input[type=search] {
+    border-radius: 10px;
+    border: 2px solid var(--borderColour);
+    background-color: var(--lightTextColour);
+    color: var(--darkTextColour);
+}
 
 /* Icons and Images */
 
@@ -136,7 +142,7 @@ button {
     height: 50px;
 
     text-align: center;
-    background-color: var(--buttonBackgroundColour); /* This will get overwritten by the javascript */
+    background-color: var(--headerBackgroundColour); /* This will get overwritten by the javascript */
 }
 #event-headers article h2 {
     font-size: 20px;
@@ -297,7 +303,7 @@ button {
     height: auto;
     position: absolute;
     right: 0px;
-    background-color: var(--buttonHighlightColour);
+    background-color: var(--backgroundColour);
     border-left: var(--highlightColour) solid 5px;
     border-bottom: var(--highlightColour) solid 5px;
 }
@@ -313,7 +319,7 @@ button {
 #aside-headerbar {
     display: flex;
     flex-direction: column;
-    background-color: var(--buttonBackgroundColour);
+    background-color: var(--headerBackgroundColour);
 }
 #aside-headerbar div {
     display: flex;
@@ -326,8 +332,8 @@ button {
     width: auto;
 }
 #aside-headerbar #add-friend {
-    background-color: var(--buttonHighlightColour);
-    color: var(--lightTextColour);
+    background-color: var(--buttonBackgroundColour);
+    color: var(--darkTextColour);
     font-size: 14px;
     margin: 3px auto 3px 5px;
     padding: 2px auto 2px auto;

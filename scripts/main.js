@@ -353,17 +353,22 @@ function ChooseEventPage(view, edit, list) {
 }
 
 function loadEventList(eventType) {
+    var buttonBase = "rgb(180, 180, 180)";
+    var buttonHighlight = "rgb(78, 78, 78)";
+    var buttonTextBase = "black";
+    var buttonTextHighlight = "white";
+
     if (eventType == "upcoming") {
-        setEventHeaderColours("rgb(78, 78, 78)", "rgb(180, 180, 180)", "rgb(180, 180, 180)");
-        setEventHeaderTextColours("white", "black", "black");
+        setEventHeaderColours(buttonHighlight, buttonBase, buttonBase);
+        setEventHeaderTextColours(buttonTextHighlight, buttonTextBase, buttonTextBase);
 
     } else if (eventType == "repeating") {
-        setEventHeaderColours("rgb(180, 180, 180)", "rgb(78, 78, 78)", "rgb(180, 180, 180)");
-        setEventHeaderTextColours("black", "white", "black");
+        setEventHeaderColours(buttonBase, buttonHighlight, buttonBase);
+        setEventHeaderTextColours(buttonTextBase, buttonTextHighlight, buttonTextBase);
 
     } else {
-        setEventHeaderColours("rgb(180, 180, 180)", "rgb(180, 180, 180)", "rgb(78, 78, 78)");
-        setEventHeaderTextColours("black", "black", "white");
+        setEventHeaderColours(buttonBase, buttonBase, buttonHighlight);
+        setEventHeaderTextColours(buttonTextBase, buttonTextBase, buttonTextHighlight);
     }
 
     if (localStorage.getItem("events") != null) {
