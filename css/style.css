@@ -108,7 +108,7 @@ input[type=search] {
     margin: auto 5px auto 10px;
     font-weight: bold;
 }
-#event-search-bar {
+#event-search {
     height: 40px;
     min-width: 80px;
     margin: auto 10px auto 5px;

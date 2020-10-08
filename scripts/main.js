@@ -217,8 +217,126 @@ function viewEventPage(key) {
 
 
 
+// Page Loading
+
+function loadEventViewPage() {
+    ChooseEventPage("flex", "none", "none")
+}
+
+function loadEventEditPage() {
+    ChooseEventPage("none", "flex", "none")
+
+    loadFriendsGoingSection();
+
+    // Hiding Header Elements
+    document.getElementById("add-event").style.display = "none";
+    document.getElementById("event-search").style.display = "none";
+    document.getElementById("search-icon").style.display = "none";
+}
+
+function loadEventListPage() {
+    ChooseEventPage("none", "none", "flex");
+
+    resetFriendGoingStatus(); // Reseting the 'going' variable in the friends dictionary to false
+    localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
+
+    // Showing Header Elements
+    document.getElementById("add-event").style.display = "block";
+    document.getElementById("event-search").style.display = "block";
+    document.getElementById("search-icon").style.display = "block";
+}
+
+function ChooseEventPage(view, edit, list) {
+    // Switching Pages
+    var eventViewSection = document.getElementById("event-view-section");
+    var eventEditSection = document.getElementById("event-edit-section");
+    var eventListSection = document.getElementById("event-list-section");
+
+    document.getElementById("edit-event-header").style.display = "none";
+
+    eventViewSection.style.display = view;
+    eventEditSection.style.display = edit;
+    eventListSection.style.display = list;
+}
+
+function loadEventList(eventType) {
+    var buttonBase = "#86BBD8";
+    var buttonHighlight = "#d46b32";
+    var buttonTextBase = "black";
+    var buttonTextHighlight = "white";
+
+    var searchQuery =  document.getElementById("event-search").value;
+    document.getElementById("event-search").onchange = function() {loadEventList(eventType)};
+    document.getElementById("search-icon").onclick = function() {loadEventList(eventType)};
+
+    if (eventType == "upcoming") {
+        setEventHeaderColours(buttonHighlight, buttonBase, buttonBase);
+        setEventHeaderTextColours(buttonTextHighlight, buttonTextBase, buttonTextBase);
+
+    } else if (eventType == "repeating") {
+        setEventHeaderColours(buttonBase, buttonHighlight, buttonBase);
+        setEventHeaderTextColours(buttonTextBase, buttonTextHighlight, buttonTextBase);
+
+    } else {
+        setEventHeaderColours(buttonBase, buttonBase, buttonHighlight);
+        setEventHeaderTextColours(buttonTextBase, buttonTextBase, buttonTextHighlight);
+    }
+
+    if (localStorage.getItem("events") != null) {
+        // Clears the event-list element in the html
+        document.getElementById("event-list").innerHTML = "";
+
+        var eventList = JSON.parse(localStorage.getItem("events"));
+    
+        for(var i = 0; i < eventList.length; i++) {
+            var outStr = "";
+            var eventData = JSON.parse(eventList[i]);
+ 
+            if (eventData.type == eventType) {
+                // if the searchbar has nothing in it show lists like normal
+                if (searchQuery == null || searchQuery == "") {
+                    outStr += "<li><div>";
+                    outStr += "<p class=\"event-name\" onclick=\"viewEventPage('" + i + "')\">" + eventData.name + "</p>";
+                    outStr += "<button class=\"event-edit-button\" onclick=\"editEventPage('" + i + "')\">Edit</button>";
+                    outStr += "<button class=\"event-delete-button\" onclick=\"deleteEvent('" + i + "','" + eventData.type + "')\">Delete</button>";
+                    outStr += "</div><span class=\"Hdivider\"></span><div onclick=\"viewEventPage('" + i + "')\">";
+                    outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                    outStr += "<p class=\"event-time\">" + eventData.time + "</p>";
+                    outStr += "</div></li>";
+                } else { // If the searchbar does have something in it, see if that something matches any event names and show them if it does.
+                    if (searchQuery == eventData.name) {
+                        outStr += "<li><div>";
+                        outStr += "<p class=\"event-name\" onclick=\"viewEventPage('" + i + "')\">" + eventData.name + "</p>";
+                        outStr += "<button class=\"event-edit-button\" onclick=\"editEventPage('" + i + "')\">Edit</button>";
+                        outStr += "<button class=\"event-delete-button\" onclick=\"deleteEvent('" + i + "','" + eventData.type + "')\">Delete</button>";
+                        outStr += "</div><span class=\"Hdivider\"></span><div onclick=\"viewEventPage('" + i + "')\">";
+                        outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                        outStr += "<p class=\"event-time\">" + eventData.time + "</p>";
+                        outStr += "</div></li>";
+                    } 
+                }
+                // Adds the final out string to the inner html of the event list section
+                document.getElementById("event-list").innerHTML += outStr;
+            }
+        }
+    }
+}
+
+function setEventHeaderColours(upcoming, repeating, finished) {
+    document.getElementById("upcoming").style.backgroundColor = upcoming;
+    document.getElementById("repeating").style.backgroundColor = repeating;
+    document.getElementById("finished").style.backgroundColor = finished;
+}
+function setEventHeaderTextColours(upcoming, repeating, finished) {
+    document.getElementById("upcoming").style.color = upcoming;
+    document.getElementById("repeating").style.color = repeating;
+    document.getElementById("finished").style.color = finished;
+}
 
 
+
+
+// Functions related to adding friends from the friends list to an event
 
 function setGoingStatus(friendKey, status, friendList) {
     if (localStorage.getItem("friends") != null) {
@@ -308,112 +426,6 @@ function loadFriendsGoingSection() {
         document.getElementById("add-event-friends-going").innerHTML = "";
     }
 }
-
-
-// Page Loading
-
-function loadEventViewPage() {
-    ChooseEventPage("flex", "none", "none")
-}
-
-function loadEventEditPage() {
-    ChooseEventPage("none", "flex", "none")
-
-    loadFriendsGoingSection();
-
-    // Hiding Header Elements
-    document.getElementById("add-event").style.display = "none";
-    document.getElementById("event-search-bar").style.display = "none";
-    document.getElementById("search-icon").style.display = "none";
-}
-
-function loadEventListPage() {
-    ChooseEventPage("none", "none", "flex");
-
-    resetFriendGoingStatus(); // Reseting the 'going' variable in the friends dictionary to false
-    localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
-
-    // Showing Header Elements
-    document.getElementById("add-event").style.display = "block";
-    document.getElementById("event-search-bar").style.display = "block";
-    document.getElementById("search-icon").style.display = "block";
-}
-
-function ChooseEventPage(view, edit, list) {
-    // Switching Pages
-    var eventViewSection = document.getElementById("event-view-section");
-    var eventEditSection = document.getElementById("event-edit-section");
-    var eventListSection = document.getElementById("event-list-section");
-
-    document.getElementById("edit-event-header").style.display = "none";
-
-    eventViewSection.style.display = view;
-    eventEditSection.style.display = edit;
-    eventListSection.style.display = list;
-}
-
-function loadEventList(eventType) {
-    var buttonBase = "#86BBD8";
-    // var buttonHighlight = "#D4520C";
-    var buttonHighlight = "#d46b32";
-    var buttonTextBase = "black";
-    var buttonTextHighlight = "white";
-
-    if (eventType == "upcoming") {
-        setEventHeaderColours(buttonHighlight, buttonBase, buttonBase);
-        setEventHeaderTextColours(buttonTextHighlight, buttonTextBase, buttonTextBase);
-
-    } else if (eventType == "repeating") {
-        setEventHeaderColours(buttonBase, buttonHighlight, buttonBase);
-        setEventHeaderTextColours(buttonTextBase, buttonTextHighlight, buttonTextBase);
-
-    } else {
-        setEventHeaderColours(buttonBase, buttonBase, buttonHighlight);
-        setEventHeaderTextColours(buttonTextBase, buttonTextBase, buttonTextHighlight);
-    }
-
-    if (localStorage.getItem("events") != null) {
-        // Clears the event-list element in the html
-        document.getElementById("event-list").innerHTML = "";
-
-        var eventList = JSON.parse(localStorage.getItem("events"));
-    
-        for(var i = 0; i < eventList.length; i++) {
-            var outStr = "";
-            var eventData = JSON.parse(eventList[i]);
-            
-            if (eventData.type == eventType) {
-                outStr += "<li><div>";
-                outStr += "<p class=\"event-name\" onclick=\"viewEventPage('" + i + "')\">" + eventData.name + "</p>";
-                outStr += "<button class=\"event-edit-button\" onclick=\"editEventPage('" + i + "')\">Edit</button>";
-                outStr += "<button class=\"event-delete-button\" onclick=\"deleteEvent('" + i + "','" + eventData.type + "')\">Delete</button>";
-                outStr += "</div><span class=\"Hdivider\"></span><div onclick=\"viewEventPage('" + i + "')\">";
-                outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
-                outStr += "<p class=\"event-time\">" + eventData.time + "</p>";
-                outStr += "</div></li>";
-                
-                document.getElementById("event-list").innerHTML += outStr;
-            }
-        }
-    }
-}
-
-function setEventHeaderColours(upcoming, repeating, finished) {
-    document.getElementById("upcoming").style.backgroundColor = upcoming;
-    document.getElementById("repeating").style.backgroundColor = repeating;
-    document.getElementById("finished").style.backgroundColor = finished;
-}
-function setEventHeaderTextColours(upcoming, repeating, finished) {
-    document.getElementById("upcoming").style.color = upcoming;
-    document.getElementById("repeating").style.color = repeating;
-    document.getElementById("finished").style.color = finished;
-}
-
-
-function searchEvents() {
-    alert("This Function is not implemented yet.")
-}
-
 
 
 
