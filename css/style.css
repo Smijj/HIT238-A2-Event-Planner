@@ -83,7 +83,13 @@ input[type=search] {
     margin: 9px auto 9px 9px;
     padding: 0;
 }
-#search-icon {
+#event-search-icon {
+    width: 32px;
+    height: 32px;
+    margin: 9px 9px 9px 0px;
+    padding: 0;
+}
+#friend-search-icon {
     width: 32px;
     height: 32px;
     margin: 9px 9px 9px 0px;
@@ -347,7 +353,7 @@ input[type=search] {
     height: auto;
     width: 30%;
 }
-#friend-search-bar {
+#friend-search {
     width: 70%;
     height: 32px;
     margin: 0 5px 0 10px;

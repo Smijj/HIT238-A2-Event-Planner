@@ -231,7 +231,7 @@ function loadEventEditPage() {
     // Hiding Header Elements
     document.getElementById("add-event").style.display = "none";
     document.getElementById("event-search").style.display = "none";
-    document.getElementById("search-icon").style.display = "none";
+    document.getElementById("event-search-icon").style.display = "none";
 }
 
 function loadEventListPage() {
@@ -243,7 +243,7 @@ function loadEventListPage() {
     // Showing Header Elements
     document.getElementById("add-event").style.display = "block";
     document.getElementById("event-search").style.display = "block";
-    document.getElementById("search-icon").style.display = "block";
+    document.getElementById("event-search-icon").style.display = "block";
 }
 
 function ChooseEventPage(view, edit, list) {
@@ -267,7 +267,7 @@ function loadEventList(eventType) {
 
     var searchQuery =  document.getElementById("event-search").value;
     document.getElementById("event-search").onchange = function() {loadEventList(eventType)};
-    document.getElementById("search-icon").onclick = function() {loadEventList(eventType)};
+    document.getElementById("event-search-icon").onclick = function() {loadEventList(eventType)};
 
     if (eventType == "upcoming") {
         setEventHeaderColours(buttonHighlight, buttonBase, buttonBase);
@@ -573,24 +573,35 @@ function loadFriendList() {
         // Clears the friend-list element in the html
         document.getElementById("friend-list").innerHTML = "";
 
+        var searchQuery = document.getElementById("friend-search").value;
+        document.getElementById("friend-search").onchange = function() {loadFriendList()}; 
+        document.getElementById("friend-search-icon").onclick = function() {loadFriendList()};
+   
+
         var friendList = JSON.parse(localStorage.getItem("friends"));
     
         for(var i = 0; i < friendList.length; i++) {
             var outStr = "";
             var friendData = JSON.parse(friendList[i]);
-            
-            outStr += "<li><div onclick=\"viewFriendPage('" + i + "')\">";
-            outStr += "<p class=\"friend-name\">" + friendData.name + "</p>";
-            outStr += "</div><span>";
-            outStr += "<button class=\"friend-edit-button\" onclick=\"editFriendPage('" + i + "')\">Edit</button>";
-            outStr += "<button class=\"friend-delete-button\" onclick=\"deleteFriend('" + i + "')\">Delete</button>";
-            outStr += "</span></li>";
-            
+
+            if (searchQuery == null || searchQuery == "") {
+                outStr += "<li><div onclick=\"viewFriendPage('" + i + "')\">";
+                outStr += "<p class=\"friend-name\">" + friendData.name + "</p>";
+                outStr += "</div><span>";
+                outStr += "<button class=\"friend-edit-button\" onclick=\"editFriendPage('" + i + "')\">Edit</button>";
+                outStr += "<button class=\"friend-delete-button\" onclick=\"deleteFriend('" + i + "')\">Delete</button>";
+                outStr += "</span></li>";
+            } else {
+                if (searchQuery == friendData.name) {
+                    outStr += "<li><div onclick=\"viewFriendPage('" + i + "')\">";
+                    outStr += "<p class=\"friend-name\">" + friendData.name + "</p>";
+                    outStr += "</div><span>";
+                    outStr += "<button class=\"friend-edit-button\" onclick=\"editFriendPage('" + i + "')\">Edit</button>";
+                    outStr += "<button class=\"friend-delete-button\" onclick=\"deleteFriend('" + i + "')\">Delete</button>";
+                    outStr += "</span></li>";
+                }
+            }
             document.getElementById("friend-list").innerHTML += outStr;
         }
     }
-}
-
-function searchFriends() {
-    alert("This Function is not implemented yet.")
 }
