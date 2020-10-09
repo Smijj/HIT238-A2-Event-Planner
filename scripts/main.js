@@ -254,7 +254,9 @@ function loadEventList(eventType) {
     var buttonTextBase = "black";
     var buttonTextHighlight = "white";
 
-    var searchQuery =  document.getElementById("event-search").value;
+    // Checks the value of the event search input
+    var searchQuery = document.getElementById("event-search").value;
+    // reloads the list on every keyup while typing in the search box
     document.getElementById("event-search").onkeyup = function() {loadEventList(eventType)};
 
     if (eventType == "upcoming") {
