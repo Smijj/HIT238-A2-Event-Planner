@@ -37,13 +37,6 @@ function toggleSidebar() {
 
 
 
-
-
-
-
-
-
-
 /* EVENTS */
 
 // Data Manipulation Functions
@@ -231,7 +224,6 @@ function loadEventEditPage() {
     // Hiding Header Elements
     document.getElementById("add-event").style.display = "none";
     document.getElementById("event-search").style.display = "none";
-    document.getElementById("event-search-icon").style.display = "none";
 }
 
 function loadEventListPage() {
@@ -243,7 +235,6 @@ function loadEventListPage() {
     // Showing Header Elements
     document.getElementById("add-event").style.display = "block";
     document.getElementById("event-search").style.display = "block";
-    document.getElementById("event-search-icon").style.display = "block";
 }
 
 function ChooseEventPage(view, edit, list) {
@@ -266,8 +257,7 @@ function loadEventList(eventType) {
     var buttonTextHighlight = "white";
 
     var searchQuery =  document.getElementById("event-search").value;
-    document.getElementById("event-search").onchange = function() {loadEventList(eventType)};
-    document.getElementById("event-search-icon").onclick = function() {loadEventList(eventType)};
+    document.getElementById("event-search").onkeyup = function() {loadEventList(eventType)};
 
     if (eventType == "upcoming") {
         setEventHeaderColours(buttonHighlight, buttonBase, buttonBase);
@@ -332,6 +322,7 @@ function setEventHeaderTextColours(upcoming, repeating, finished) {
     document.getElementById("repeating").style.color = repeating;
     document.getElementById("finished").style.color = finished;
 }
+
 
 
 
@@ -574,9 +565,7 @@ function loadFriendList() {
         document.getElementById("friend-list").innerHTML = "";
 
         var searchQuery = document.getElementById("friend-search").value;
-        document.getElementById("friend-search").onchange = function() {loadFriendList()}; 
-        document.getElementById("friend-search-icon").onclick = function() {loadFriendList()};
-   
+        document.getElementById("friend-search").onkeyup = function() {loadFriendList()};    
 
         var friendList = JSON.parse(localStorage.getItem("friends"));
     
