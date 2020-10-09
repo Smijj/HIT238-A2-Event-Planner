@@ -67,8 +67,6 @@ function saveEvent() {
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
     var friendsGoing = JSON.parse(localStorage.getItem('temp_list')); // gets a list of stringified dictionaries
 
-    console.log(friendsGoing);
-
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
         eventType = "upcoming";
@@ -281,6 +279,13 @@ function loadEventList(eventType) {
         for(var i = 0; i < eventList.length; i++) {
             var outStr = "";
             var eventData = JSON.parse(eventList[i]);
+
+            // Checks if the event has happened yet
+            if (new Date() > new Date(eventData.rawDate)) {
+                eventData.type = "finished";
+                eventList.splice(i, 1, JSON.stringify(eventData)); // Replacing the entry in the list
+                localStorage.setItem("events", JSON.stringify(eventList));
+            }
  
             if (eventData.type == eventType) {
                 // if the searchbar has nothing in it show lists like normal
