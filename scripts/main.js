@@ -176,15 +176,22 @@ function addEventPage() {
 function editEventPage(key) {
     loadEventEditPage();
 
+    var eventList = JSON.parse(localStorage.getItem("events"));
+    var eventData = JSON.parse(eventList[key]);
+
+    // Changes the title of the page to reflect the fact that it is the edit page.
     document.getElementById("edit-event-header").innerHTML = "Edit Event";
     document.getElementById("edit-event-header").style.display = "block";
     
     // Switching Buttons in the event edit page
     document.getElementById("event-edit-button").innerHTML = "Save Event";
     document.getElementById("event-edit-button").onclick = function() {editEvent(key)};
-    
-    var eventList = JSON.parse(localStorage.getItem("events"));
-    var eventData = JSON.parse(eventList[key]);
+
+    // correctly loads the repeating days if the event is repeating
+    if (eventData.repeating) {
+        document.getElementById("repeating-event-toggle-date").style.display = "none";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "flex";
+    }
 
     document.getElementById("nameValue").value = eventData.name;
     document.getElementById("dateValue").value = eventData.rawDate;
@@ -263,6 +270,29 @@ function viewEventPage(key) {
     }
 }
 
+// Repeating Events Stuff
+function repeatingEventToggle(){
+    var repeatingValue = document.getElementById("repeatingValue").checked;
+    if (repeatingValue) {
+        document.getElementById("repeating-event-toggle-date").style.display = "none";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "flex";
+    } else {
+        document.getElementById("repeating-event-toggle-date").style.display = "block";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
+    }
+}
+function resetRepeatingToggle(){
+    document.getElementById("repeating-event-toggle-date").style.display = "block";
+    document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
+    document.getElementById("mondayValue").checked = false;
+    document.getElementById("tuesdayValue").checked = false;
+    document.getElementById("wednesdayValue").checked = false;
+    document.getElementById("thursdayValue").checked = false;
+    document.getElementById("fridayValue").checked = false;
+    document.getElementById("saturdayValue").checked = false;
+    document.getElementById("sundayValue").checked = false;
+}
+
 
 
 
@@ -287,6 +317,7 @@ function loadEventEditPage() {
 function loadEventListPage() {
     ChooseEventPage("none", "none", "flex");
 
+    resetRepeatingToggle(); // Reseting the repeading days in the add event section
     resetFriendGoingStatus(); // Reseting the 'going' variable in the friends dictionary to false
     localStorage.removeItem('temp_list'); // Removing the temp_list from local storage
 
@@ -344,9 +375,11 @@ function loadEventList(eventType) {
 
             // Checks if the event has happened yet
             if (new Date() > new Date(eventData.rawDate)) {
-                eventData.type = "finished";
-                eventList.splice(i, 1, JSON.stringify(eventData)); // Replacing the entry in the list
-                localStorage.setItem("events", JSON.stringify(eventList));
+                if (eventData.type != "repeating"){
+                    eventData.type = "finished";
+                    eventList.splice(i, 1, JSON.stringify(eventData)); // Replacing the entry in the list
+                    localStorage.setItem("events", JSON.stringify(eventList));
+                } 
             }
  
             if (eventData.type == eventType) {
@@ -391,19 +424,6 @@ function setEventHeaderTextColours(upcoming, repeating, finished) {
 }
 
 
-
-// Repeating Events Stuff
-
-function repeatingEventToggle(){
-    var repeatingValue = document.getElementById("repeatingValue").checked;
-    if (repeatingValue) {
-        document.getElementById("repeating-event-toggle-date").style.display = "none";
-        document.getElementById("repeating-event-toggle-weekdays").style.display = "flex";
-    } else {
-        document.getElementById("repeating-event-toggle-date").style.display = "block";
-        document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
-    }
-}
 
 
 
