@@ -67,6 +67,24 @@ function saveEvent() {
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
     var friendsGoing = JSON.parse(localStorage.getItem('temp_list')); // gets a list of stringified dictionaries
 
+    // If repeating what days are the event to repeat on?
+    var mondayValue = document.getElementById("mondayValue").checked;
+    var tuesdayValue = document.getElementById("tuesdayValue").checked;
+    var wednesdayValue = document.getElementById("wednesdayValue").checked;
+    var thursdayValue = document.getElementById("thursdayValue").checked;
+    var fridayValue = document.getElementById("fridayValue").checked;
+    var saturdayValue = document.getElementById("saturdayValue").checked;
+    var sundayValue = document.getElementById("sundayValue").checked;
+    var repeatingDays = {
+        "monday": mondayValue, 
+        "tuesday": tuesdayValue, 
+        "wednesday": wednesdayValue, 
+        "thursday": thursdayValue, 
+        "friday": fridayValue, 
+        "saturday": saturdayValue, 
+        "sunday": sundayValue
+    };
+
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
         eventType = "upcoming";
@@ -78,7 +96,16 @@ function saveEvent() {
     }
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friendsGoing": friendsGoing};
+    var data = {
+        "name" : nameValue, 
+        "date" : localDateFormat, 
+        "rawDate": dateValue, 
+        "time": timeValue, 
+        "type": eventType, 
+        "repeating": repeatingValue, 
+        "repeatingDays": repeatingDays, 
+        "friendsGoing": friendsGoing
+    };
     // Getting the list (array techincally whatever) of events from local storage
     var eventList = JSON.parse(localStorage.getItem("events"));
     eventList.push(JSON.stringify(data)); 
@@ -163,6 +190,14 @@ function editEventPage(key) {
     document.getElementById("dateValue").value = eventData.rawDate;
     document.getElementById("timeValue").value = eventData.time;
     document.getElementById("repeatingValue").checked = eventData.repeating;
+    // repeating days
+    document.getElementById("mondayValue").checked = eventData.repeatingDays.monday;
+    document.getElementById("tuesdayValue").checked = eventData.repeatingDays.tuesday;
+    document.getElementById("wednesdayValue").checked = eventData.repeatingDays.wednesday;
+    document.getElementById("thursdayValue").checked = eventData.repeatingDays.thursday;
+    document.getElementById("fridayValue").checked = eventData.repeatingDays.friday;
+    document.getElementById("saturdayValue").checked = eventData.repeatingDays.saturday;
+    document.getElementById("sundayValue").checked = eventData.repeatingDays.sunday;
 
     localStorage.setItem("temp_list", JSON.stringify(eventData.friendsGoing));
 
@@ -182,6 +217,28 @@ function viewEventPage(key) {
 
     var eventList = JSON.parse(localStorage.getItem("events"));
     var eventData = JSON.parse(eventList[key]);
+    var repeatingDaysString = "";
+    if (eventData.repeatingDays.monday) {
+        repeatingDaysString += "Mon  "
+    }
+    if (eventData.repeatingDays.tuesday) {
+        repeatingDaysString += "Tue  "
+    }
+    if (eventData.repeatingDays.wednesday) {
+        repeatingDaysString += "Wed  "
+    }
+    if (eventData.repeatingDays.thursday) {
+        repeatingDaysString += "Thu  "
+    }
+    if (eventData.repeatingDays.friday) {
+        repeatingDaysString += "Fri  "
+    }
+    if (eventData.repeatingDays.saturday) {
+        repeatingDaysString += "Sat  "
+    }
+    if (eventData.repeatingDays.sunday) {
+        repeatingDaysString += "Sun  "
+    }
     
     // Setting the onclick functions for event view buttons
     document.getElementById("event-view-edit-button").onclick = function() {editEventPage(key)};
@@ -191,6 +248,9 @@ function viewEventPage(key) {
     document.getElementById("event-view-date").innerHTML = eventData.date;
     document.getElementById("event-view-time").innerHTML = eventData.time;
     document.getElementById("event-view-repeating").innerHTML = eventData.repeating;
+    document.getElementById("event-view-repeatingdays").innerHTML = repeatingDaysString;
+
+    
 
     document.getElementById("view-friends-going").innerHTML = "";
     for (var i = 0; i < eventData.friendsGoing.length; i++) {
