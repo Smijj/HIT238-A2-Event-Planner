@@ -126,6 +126,23 @@ function editEvent(key) {
     var localDateFormat = new Date(dateValue).toLocaleDateString("en-AU"); // Converts to local date format
     var friendsGoing = JSON.parse(localStorage.getItem('temp_list')); // gets a list of stringified dictionaries
 
+    // If repeating what days are the event to repeat on?
+    var mondayValue = document.getElementById("mondayValue").checked;
+    var tuesdayValue = document.getElementById("tuesdayValue").checked;
+    var wednesdayValue = document.getElementById("wednesdayValue").checked;
+    var thursdayValue = document.getElementById("thursdayValue").checked;
+    var fridayValue = document.getElementById("fridayValue").checked;
+    var saturdayValue = document.getElementById("saturdayValue").checked;
+    var sundayValue = document.getElementById("sundayValue").checked;
+    var repeatingDays = {
+        "monday": mondayValue, 
+        "tuesday": tuesdayValue, 
+        "wednesday": wednesdayValue, 
+        "thursday": thursdayValue, 
+        "friday": fridayValue, 
+        "saturday": saturdayValue, 
+        "sunday": sundayValue
+    };
 
     // Checks if the event has happened yet
     if (new Date() < new Date(dateValue)) {
@@ -138,7 +155,16 @@ function editEvent(key) {
     }
 
     // Creating an object that holds the event data
-    var data = {"name" : nameValue, "date" : localDateFormat, "rawDate": dateValue, "time": timeValue, "type": eventType, "repeating": repeatingValue, "friendsGoing": friendsGoing};
+    var data = {
+        "name" : nameValue, 
+        "date" : localDateFormat, 
+        "rawDate": dateValue, 
+        "time": timeValue, 
+        "type": eventType, 
+        "repeating": repeatingValue, 
+        "repeatingDays": repeatingDays, 
+        "friendsGoing": friendsGoing};
+    
     // Getting the list (array techincally whatever) of events from local storage
     tempList = JSON.parse(localStorage.getItem("events"));
     tempList.splice(key, 1, JSON.stringify(data)); // Replacing the existing data in the event list with the new values
@@ -219,6 +245,7 @@ function editEventPage(key) {
     loadFriendsGoingSection();
 }
 
+
 function viewEventPage(key) {
     loadEventViewPage();
 
@@ -250,14 +277,18 @@ function viewEventPage(key) {
     // Setting the onclick functions for event view buttons
     document.getElementById("event-view-edit-button").onclick = function() {editEventPage(key)};
     document.getElementById("event-view-delete-button").onclick = function() {deleteEvent(key, eventData.type)};
-
     document.getElementById("event-view-name").innerHTML = eventData.name;
-    document.getElementById("event-view-date").innerHTML = eventData.date;
+    if (eventData.repeating) {
+        document.getElementById("event-view-repeatingdays").innerHTML = repeatingDaysString;
+        document.getElementById("view-date").style.display = "none";
+        document.getElementById("view-repeating-days").style.display = "flex";
+    } else {
+        document.getElementById("event-view-date").innerHTML = eventData.date;
+        document.getElementById("view-date").style.display = "flex";
+        document.getElementById("view-repeating-days").style.display = "none";
+    }
     document.getElementById("event-view-time").innerHTML = eventData.time;
     document.getElementById("event-view-repeating").innerHTML = eventData.repeating;
-    document.getElementById("event-view-repeatingdays").innerHTML = repeatingDaysString;
-
-    
 
     document.getElementById("view-friends-going").innerHTML = "";
     for (var i = 0; i < eventData.friendsGoing.length; i++) {
@@ -277,7 +308,7 @@ function repeatingEventToggle(){
         document.getElementById("repeating-event-toggle-date").style.display = "none";
         document.getElementById("repeating-event-toggle-weekdays").style.display = "flex";
     } else {
-        document.getElementById("repeating-event-toggle-date").style.display = "block";
+        document.getElementById("repeating-event-toggle-date").style.display = "flex";
         document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
     }
 }
@@ -390,7 +421,11 @@ function loadEventList(eventType) {
                     outStr += "<button class=\"event-edit-button\" onclick=\"editEventPage('" + i + "')\">Edit</button>";
                     outStr += "<button class=\"event-delete-button\" onclick=\"deleteEvent('" + i + "','" + eventData.type + "')\">Delete</button>";
                     outStr += "</div><span class=\"Hdivider\"></span><div onclick=\"viewEventPage('" + i + "')\">";
-                    outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                    if (eventData.repeating){
+                        outStr += "<p class=\"event-date\">Repeating Event</p>";
+                    } else {
+                        outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                    }
                     outStr += "<p class=\"event-time\">" + eventData.time + "</p>";
                     outStr += "</div></li>";
                 } else { // If the searchbar does have something in it, see if that something matches any event names and show them if it does.
@@ -400,7 +435,11 @@ function loadEventList(eventType) {
                         outStr += "<button class=\"event-edit-button\" onclick=\"editEventPage('" + i + "')\">Edit</button>";
                         outStr += "<button class=\"event-delete-button\" onclick=\"deleteEvent('" + i + "','" + eventData.type + "')\">Delete</button>";
                         outStr += "</div><span class=\"Hdivider\"></span><div onclick=\"viewEventPage('" + i + "')\">";
-                        outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                        if (eventData.repeating){
+                            outStr += "<p class=\"event-date\">Repeating Event</p>";
+                        } else {
+                            outStr += "<p class=\"event-date\">" + eventData.date + "</p>";
+                        }
                         outStr += "<p class=\"event-time\">" + eventData.time + "</p>";
                         outStr += "</div></li>";
                     } 

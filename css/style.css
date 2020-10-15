@@ -318,6 +318,14 @@ input[type=search] {
     margin: 8px 0 0 0;
 }
 
+#view-repeating-days {
+    display: flex; /* This will get overwritten by the javascript */
+    flex-direction: column;
+}
+#view-date {
+    display: flex; /* This will get overwritten by the javascript */
+    flex-direction: column;
+}
 
 
 
