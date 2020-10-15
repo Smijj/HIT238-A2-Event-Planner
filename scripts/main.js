@@ -338,10 +338,10 @@ function repeatingEventToggle(){
     var repeatingValue = document.getElementById("repeatingValue").checked;
     if (repeatingValue) {
         document.getElementById("repeating-event-toggle-date").style.display = "none";
-        document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "flex";
     } else {
         document.getElementById("repeating-event-toggle-date").style.display = "block";
-        document.getElementById("repeating-event-toggle-weekdays").style.display = "block";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
     }
 }
 
