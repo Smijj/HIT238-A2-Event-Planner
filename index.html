@@ -76,14 +76,47 @@
             <label for="nameValue">Name: </label>
             <input type="text" name="name" id="nameValue">
 
-            <label for="dateValue">Date: </label>
-            <input type="date" name="date" id="dateValue">
-            
+            <div id="repeating-event-toggle-date">
+                <label for="dateValue">Date: </label>
+                <input type="date" name="date" id="dateValue">
+            </div>
+
             <label for="timeValue">Time: </label>
             <input type="time" name="time" id="timeValue">
 
             <label for="repeatingValue">Repeating? </label>
-            <input type="checkbox" name="repeating" id="repeatingValue">
+            <input type="checkbox" name="repeating" id="repeatingValue" onclick="repeatingEventToggle()">
+
+            <div id="repeating-event-toggle-weekdays">
+                <div>
+                    <label for="mondayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="mondayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="tuesdayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="tuesdayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="wednesdayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="wednesdayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="thursdayValue">Repeating? </label>
+                    <input type="friday" name="repeating" id="thursdayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="fridayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="fridayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="saturdayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="saturdayValue" onclick="repeatingEventToggle()">    
+                </div>
+                <div>
+                    <label for="sundayValue">Repeating? </label>
+                    <input type="checkbox" name="repeating" id="sundayValue" onclick="repeatingEventToggle()">    
+                </div>
+            </div>
 
             <label for="friendsGoing">Invite Friends: </label>
             <article id="friendsGoing">

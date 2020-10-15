@@ -332,6 +332,24 @@ function setEventHeaderTextColours(upcoming, repeating, finished) {
 
 
 
+// Repeating Events Stuff
+
+function repeatingEventToggle(){
+    var repeatingValue = document.getElementById("repeatingValue").checked;
+    if (repeatingValue) {
+        document.getElementById("repeating-event-toggle-date").style.display = "none";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "none";
+    } else {
+        document.getElementById("repeating-event-toggle-date").style.display = "block";
+        document.getElementById("repeating-event-toggle-weekdays").style.display = "block";
+    }
+}
+
+
+
+
+
+
 
 
 // Functions related to adding friends from the friends list to an event

@@ -257,6 +257,16 @@ input[type=search] {
     margin: 3px 0 3px 0;
 }
 
+#repeating-event-toggle-date {
+    display: flex; /* This will get overwritten by the javascript */
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+}
+#repeating-event-toggle-date input {
+    width: 100%; /* This overwrites the input getting set to 70% on line 214 */
+}
+
 
 /* Event View Section */
 
